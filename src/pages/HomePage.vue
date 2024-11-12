@@ -10,8 +10,8 @@ const error = ref<Error | null>(null)
 const route = useRoute()
 
 const loadTasks = async (filter: string | undefined) => {
-  todos.value = []
   isLoading.value = true
+  todos.value = []
   error.value = null
 
   let completed: boolean | undefined
