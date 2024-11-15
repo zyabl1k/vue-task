@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ThemeToggle from '@/features/ThemeToggle.vue'
 
@@ -9,20 +9,11 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const router = useRouter()
-    const currentFilter = ref(route.query.filter || 'all')
+    const currentFilter = computed(() => route.query.filter || 'all')
     const setFilter = (filter: string) => {
-      if (currentFilter.value !== filter) {
-        currentFilter.value = filter
-        router.push({ query: { ...route.query, filter } })
-      }
+      router.push({ query: { ...route.query, filter } })
     }
-    watch(
-      () => route.query.filter,
-      (newFilter) => {
-        currentFilter.value = newFilter || 'all'
-      },
-      { immediate: true },
-    )
+
     return { currentFilter, setFilter }
   },
 })

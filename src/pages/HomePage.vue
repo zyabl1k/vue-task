@@ -9,14 +9,17 @@ const isLoading = ref(false)
 const error = ref<Error | null>(null)
 const route = useRoute()
 
+const getCompletedFromFilter = (filter: string | undefined): boolean | undefined => {
+  if (filter === 'completed') return true
+  if (filter === 'incomplete') return false
+  return undefined
+}
+
 const loadTasks = async (filter: string | undefined) => {
   isLoading.value = true
-  todos.value = []
   error.value = null
+  const completed = getCompletedFromFilter(filter)
 
-  let completed: boolean | undefined
-  if (filter === 'completed') completed = true
-  else if (filter === 'incomplete') completed = false
   try {
     todos.value = await getTasks(completed)
   } catch (err) {
@@ -33,10 +36,6 @@ watch(
   },
   { immediate: true },
 )
-
-onMounted(() => {
-  loadTasks(route.query.filter as string | undefined)
-})
 </script>
 
 <template>
